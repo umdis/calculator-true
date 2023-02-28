@@ -2,7 +2,7 @@ from typing import Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from Func import boolean_algebra
+from Func.Generar_Tabla2 import writeTruthTable2
 from classes.operation import Operation
 
 app = FastAPI()
@@ -30,5 +30,5 @@ def read_root():
 
 @app.post("/formula")
 def read_item(operation: Operation):
-    response = boolean_algebra.writeTruthTable(operation.formula)
+    response = writeTruthTable2(operation.formula)
     return { "response": response }
