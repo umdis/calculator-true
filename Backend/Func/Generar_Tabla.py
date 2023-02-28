@@ -8,8 +8,7 @@ def writeTruthTable(P):
     # Itera sobre cada carácter en la proposición
     for i in range(len(P)):
         # Si el carácter es una letra mayúscula, agrega la variable al diccionario con un valor de verdad verdadero
-        #Modificar para que acepte minusculas!!!!!!!!!!!!!!!!
-        if P[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        if P[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
             truthValues[P[i]] = True
 
     # Imprime el encabezado de la tabla de verdad, que consiste en las variables de la proposición y la proposición misma
