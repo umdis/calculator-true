@@ -69,25 +69,21 @@ async function test(formula) {
 
     const testRequest = await fetch(`http://127.0.0.1:8000/formula`, settings);
     const responseRequest = await testRequest.json();
-
-    let tableTextArray = responseRequest.response.tableText.split('#');
-    console.log(tableTextArray);
-    loadGrid(tableTextArray);
+    let tableData = responseRequest.response;
+    console.log(tableData);
+    loadGrid(tableData);
 }
 
-function loadGrid(tableTextArray) {
-
+function loadGrid(tableData) {
     let table = document.getElementById('tableContent');
     table.innerHTML = "";
 
-    tableTextArray.forEach(row => {
-        let nuevaFila = table.insertRow(-1);
+    for (let i = 0; i < tableData.length; i++) {
+        let row = table.insertRow(i);
 
-        row.split('|').forEach(field => {
-            let nombre = document.createTextNode(field);
-            let nombreCelda = nuevaFila.insertCell(-1);
-            nombreCelda.appendChild(nombre);
-        });
-
-    });
+        for (let j = 0; j < tableData[i].length; j++) {
+            let cell = row.insertCell(j);
+            cell.appendChild(document.createTextNode(tableData[i][j]));
+        }
+    }
 }
