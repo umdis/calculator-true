@@ -22,11 +22,11 @@ function gatLetters() {
                                 <label for="value_${element}">${element}</label>
                             </div>
                         </div>`;
-        
+
         variablesContainer.innerHTML += newItem;
     });
 
-    test();
+    test(formula);
 }
 
 /**
@@ -54,8 +54,40 @@ function extractLetters(formula) {
     return letters;
 }
 
-async function test() {
-    const testRequest = await fetch(`http://127.0.0.1:8000/formula`);
+async function test(formula) {
+
+    const settings = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            formula: formula
+        })
+    };
+
+    const testRequest = await fetch(`http://127.0.0.1:8000/formula`, settings);
     const responseRequest = await testRequest.json();
-    console.log(responseRequest);
+
+    let tableTextArray = responseRequest.response.tableText.split('#');
+    console.log(tableTextArray);
+    loadGrid(tableTextArray);
+}
+
+function loadGrid(tableTextArray) {
+
+    let table = document.getElementById('tableContent');
+    table.innerHTML = "";
+
+    tableTextArray.forEach(row => {
+        let nuevaFila = table.insertRow(-1);
+
+        row.split('|').forEach(field => {
+            let nombre = document.createTextNode(field);
+            let nombreCelda = nuevaFila.insertCell(-1);
+            nombreCelda.appendChild(nombre);
+        });
+
+    });
 }

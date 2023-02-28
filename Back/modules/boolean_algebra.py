@@ -111,26 +111,34 @@ def parseProposition(P, truthValues):
 def writeTruthTable(P):
     # Crea un diccionario vacío para almacenar los valores de verdad de las variables
     truthValues = {}
+    
+    tableText = ""
+    text_temp_row = ""
 
     # Itera sobre cada carácter en la proposición
     for i in range(len(P)):
         # Si el carácter es una letra mayúscula, agrega la variable al diccionario con un valor de verdad verdadero
-        if P[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        if P[i] in "abcdefghijklmnopqrstuvwxyz":
             truthValues[P[i]] = True
 
     # Imprime el encabezado de la tabla de verdad, que consiste en las variables de la proposición y la proposición misma
     for statement in list(truthValues.keys()):
-        print(statement, end=" | ")
-    print(P)
+        tableText += f"{statement} | "
+        
+    tableText += f"{P}#"
 
     # Imprime la primera fila de la tabla de verdad, que consiste en los valores de verdad de las variables
     for truthValue in list(truthValues.values()):
-        print("T" if truthValue else "F", end=" | ")
+        statement = "T" if truthValue else "F"
+        tableText += f"{statement} | "
+        
     # Evalúa la proposición y imprime su valor de verdad
-    print("T" if parseProposition(P, truthValues) else "F")
+    text_temp_row = "T" if parseProposition(P, truthValues) else "F"
+    tableText += f"{text_temp_row}#"
 
     # Comienza a iterar a través de todas las combinaciones posibles de valores de verdad
     j = len(truthValues.values()) - 1
+    
     while True in truthValues.values():
         # Obtiene la variable a la que se le cambiará el valor de verdad
         variable = list(truthValues.keys())[j]
@@ -140,13 +148,16 @@ def writeTruthTable(P):
         # Si el valor de verdad de la variable se ha cambiado de verdadero a falso, imprime la fila correspondiente
         if not truthValues[variable]:
             for truthValue in list(truthValues.values()):
-                print("T" if truthValue else "F", end=" | ")
+                statement = "T" if truthValue else "F"
+                tableText += f"{statement} | "
+                
             # Evalúa la proposición y imprime su valor de verdad
-            print("T" if parseProposition(P, truthValues) else "F")
+            text_temp_row = "T" if parseProposition(P, truthValues) else "F"
+            tableText += f"{text_temp_row}#"
+            
             j = len(truthValues.values()) - 1
         # Si el valor de verdad de la variable se ha cambiado de falso a verdadero, simplemente decrementa el índice
         else:
             j -= 1
-
             
-writeTruthTable("P ∨ (Q → (R ∧ T))")
+    return { "tableText": tableText }
