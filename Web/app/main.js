@@ -25,6 +25,8 @@ function gatLetters() {
         
         variablesContainer.innerHTML += newItem;
     });
+
+    test();
 }
 
 /**
@@ -50,4 +52,10 @@ function extractLetters(formula) {
     }
 
     return letters;
+}
+
+async function test() {
+    const testRequest = await fetch(`http://127.0.0.1:8000/formula`);
+    const responseRequest = await testRequest.json();
+    console.log(responseRequest);
 }
