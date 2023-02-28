@@ -2,7 +2,7 @@ from typing import Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from modules import boolean_algebra
+from Func import boolean_algebra
 from classes.operation import Operation
 
 app = FastAPI()
