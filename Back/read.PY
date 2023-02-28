@@ -115,6 +115,7 @@ def writeTruthTable(P):
     # Itera sobre cada carácter en la proposición
     for i in range(len(P)):
         # Si el carácter es una letra mayúscula, agrega la variable al diccionario con un valor de verdad verdadero
+        #Modificar para que acepte minusculas!!!!!!!!!!!!!!!!
         if P[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
             truthValues[P[i]] = True
 
@@ -149,4 +150,4 @@ def writeTruthTable(P):
             j -= 1
 
             
-writeTruthTable("P ∨ (Q → (R ∧ T))")
+writeTruthTable("P∨(Q→(R∧T))")
