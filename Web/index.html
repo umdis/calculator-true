@@ -106,21 +106,21 @@
             <h1 class="h3 mb-3 fw-normal">Boolean Algebra Calculator</h1>
 
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="formulaInput" autofocus autocomplete="off">
+                <input type="text" class="form-control" id="formulaInput" autofocus autocomplete="off" onfocusout="getLetters()">
                 <label for="formulaInput">Formula</label>
             </div>
 
             <div class="card mb-3">
                 <div class="card-body">
-                    <button class="btn btn-sm btn-outline-primary" type="button">(</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">)</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">[</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">]</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">¬</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">∨</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">∧</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">→</button>
-                    <button class="btn btn-sm btn-outline-primary" type="button">↔</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('(')">(</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter(')')">)</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('[')">[</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter(']')">]</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('~')">~</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('∨')">∨</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('∧')">∧</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('→')">→</button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" onclick="setLetter('↔')">↔</button>
                 </div>
             </div>
 
@@ -140,7 +140,8 @@
               </div>
               
 
-            <button class="w-100 btn btn-lg btn-primary" type="button" onclick="gatLetters()">Calculate</button>
+            <button class="w-100 btn btn-lg btn-primary" type="button" onclick="getTrueValue()">Calculate</button>
+            <button class="w-100 btn btn-lg btn-success mt-2" type="button" onclick="getTableFull()">View table</button>
             <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
         </form>
     </main>
