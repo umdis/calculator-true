@@ -134,7 +134,7 @@ async function getTrueValue() {
 
             let countField = 0;
             item.forEach(field => {
-                if (countField < 2) {
+                if (countField < (item.length - 1)) {
                     caseTrue += field;
                 }
 
@@ -155,4 +155,13 @@ async function getTrueValue() {
     });
 
     loadGrid(currentCase);
+}
+
+// Validations
+function lettersOnly(e) {
+
+    //only allow a-z, A-Z, with only 1 consecutive comma ...
+    if (!e.key.match(/[a-zA-Z]/)) {
+        e.preventDefault();
+    }
 }

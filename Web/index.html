@@ -106,7 +106,7 @@
             <h1 class="h3 mb-3 fw-normal">Boolean Algebra Calculator</h1>
 
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="formulaInput" autofocus autocomplete="off" onfocusout="getLetters()">
+                <input type="text" class="form-control" id="formulaInput" autofocus autocomplete="off" onfocusout="getLetters()" onkeydown="lettersOnly(event)">
                 <label for="formulaInput">Formula</label>
             </div>
 
