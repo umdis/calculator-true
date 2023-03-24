@@ -51,10 +51,7 @@ def is_well_formed(proposition):
 
     return True
 
-
 # Función para convertir la proposición en una expresión de Sympy
-
-
 def to_sympy_expression(proposition):
     # Reemplaza los operadores lógicos por sus equivalentes en Sympy
     proposition = proposition.replace('∧', '&')
@@ -70,6 +67,14 @@ def to_sympy_expression(proposition):
         error_location = str(e).split('\'')[1]
         return f"Error de sintaxis en la proposición: {error_type} en {error_location}"
 
+def revert_operators(expression):
+    expression = expression.replace('&', '∧')
+    expression = expression.replace('|', '∨')
+    expression = expression.replace('~', '¬')
+    expression = expression.replace('>>', '→')
+    expression = expression.replace('==', '↔')
+    return expression
+
 
 def realizar_calculo(proposicion):
     check = is_well_formed(proposicion)
@@ -81,7 +86,6 @@ def realizar_calculo(proposicion):
             print('Error al convertir la proposición a una expresión de Sympy')
     else:
         print(check)
-
 
 # Función para obtener los valores de verdad de una proposición
 def obtener_valores_de_verdad(proposicion):
@@ -123,7 +127,10 @@ def obtener_valores_de_verdad(proposicion):
 
     matriz_de_listas = [df.columns.tolist()] + df.values.tolist()
 
-    return (matriz_de_listas)
+    # Aplicar la función revert_operators a cada elemento de la matriz de listas
+    matriz_de_listas_revertida = [[revert_operators(str(item)) for item in row] for row in matriz_de_listas]
+
+    return (matriz_de_listas_revertida)
 
 
 @app.get("/")
