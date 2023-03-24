@@ -40,6 +40,11 @@ function extractLetters(formula) {
     // An array of letters is obtained from the formula using regular expressions
     let purgeFormula = formula.match(/[a-zA-Z]/g);
 
+    // Si purgeFormula está vacío o null, retorna un array vacío
+    if (!purgeFormula || purgeFormula.length === 0) {
+        return [];
+    }
+
     for (let index = 0; index < purgeFormula.length; index++) {
         const element = purgeFormula[index];
 
@@ -53,7 +58,6 @@ function extractLetters(formula) {
 }
 
 async function executeOperation() {
-
     let formula = document.getElementById("formulaInput").value;
     const settings = {
         method: 'POST',
@@ -68,8 +72,14 @@ async function executeOperation() {
 
     const testRequest = await fetch(`http://127.0.0.1:8000/formula`, settings);
     const responseRequest = await testRequest.json();
-    let tableData = responseRequest.response;
 
+    if (responseRequest.error) {
+        console.error(responseRequest.error);
+        return;
+    }
+
+    let tableData = responseRequest.response;
+    console.log(tableData);
     return tableData;
 }
 

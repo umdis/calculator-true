@@ -1,33 +1,12 @@
-from typing import Union
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from starlette.requests import Request
-from starlette.middleware.cors import CORSMiddleware as StarletteCORSMiddleware
-from classes.operation import Operation
-
 from sympy import *
 from sympy.parsing.sympy_parser import parse_expr
 import pandas as pd
 
-app = FastAPI()
-
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    StarletteCORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 # Define los operadores lógicos permitidos
-#logical_operators = {'and', 'or', 'not', 'implies', 'iff'}
-logical_operators = {'∧', '∨', '¬', '→', '↔'}
+logical_operators = {'and', 'or', 'not', 'implies', 'iff'}
+#logical_operators = {'∧', '∨', '¬', '→', '↔'}
 # Función para verificar la sintaxis de la proposición
 
 
@@ -39,6 +18,9 @@ def is_well_formed(proposition):
 
     # Comprueba que solo se usen operadores lógicos permitidos
     words = proposition.split()
+    for word in words:
+        if word not in logical_operators and not is_valid_variable(word):
+            return f"La palabra '{word}' no es un operador lógico permitido ni una variable válida"
 
     # Comprueba que no haya dos operadores consecutivos
     for i in range(len(words) - 1):
@@ -52,16 +34,27 @@ def is_well_formed(proposition):
     return True
 
 
+# Función para comprobar si una cadena es una variable válida
+def is_valid_variable(variable):
+    if len(variable) == 0:
+        return False
+    if not variable[0].isalpha():
+        return False
+    for c in variable[1:]:
+        if not c.isalnum() and c != '_':
+            return False
+    return True
+
 # Función para convertir la proposición en una expresión de Sympy
 
 
 def to_sympy_expression(proposition):
     # Reemplaza los operadores lógicos por sus equivalentes en Sympy
-    proposition = proposition.replace('∧', '&')
-    proposition = proposition.replace('∨', '|')
-    proposition = proposition.replace('¬', '~')
-    proposition = proposition.replace('→', '>>')
-    proposition = proposition.replace('↔', '==')
+    proposition = proposition.replace('and', '&')
+    proposition = proposition.replace('or', '|')
+    proposition = proposition.replace('not', '~')
+    proposition = proposition.replace('implies', '>>')
+    proposition = proposition.replace('iff', '==')
 
     try:
         return sympify(proposition)
@@ -128,49 +121,22 @@ def obtener_valores_de_verdad(proposicion):
     
     return (matriz_de_listas)
 
+def validar_proposicion(prop):
+    try:
+        expresion = simplify(sympify(prop))
+        return True
+    except:
+        return False
 
 
+# Ejemplo de uso
+proposicion = input("Digite una proposicion logica:")
 
-
-@app.get("/")
-def read_root():
-    return {"response": "Welcome to use free Algebra boolean calculator"}
-
-
-"""@app.post("/formula")
-def read_item(operation: Operation):
-    response = writeTruthTable2(operation.formula)
-    return { "response": response }"""
-
-
-"""@app.post('/formula')
-def procesar_proposicion(operation: Operation):
-    proposicion = operation.formula
+if validar_proposicion(proposicion) == True:
     expresion = realizar_calculo(proposicion)
     if expresion is not None:
-        response = obtener_valores_de_verdad(str(expresion))
-        print(response)
-        return {"response": response}
+        print(obtener_valores_de_verdad(str(expresion)))
     else:
-        return {"error": 'La proposición no está bien formada'}"""
-
-
-@app.post('/formula', response_class=JSONResponse)
-async def procesar_proposicion(request: Request, operation: Operation):
-    proposicion = operation.formula
-    expresion = realizar_calculo(proposicion)
-    if expresion is not None:
-        response = obtener_valores_de_verdad(str(expresion))
-        return JSONResponse(content={"response": response})
-    else:
-        return JSONResponse(content={"error": 'La proposición no está bien formada'})
-
-
-"""prop = '¬p'
-exp = realizar_calculo(prop)
-if exp is not None:
-    response = obtener_valores_de_verdad(str(exp))
-    print(response)
-
+        print('La proposición no está bien formada')
 else:
-    print('La proposición no está bien formada')"""
+    print('La proposición no está bien formada verifique la sintaxis e intente nuevamente')
