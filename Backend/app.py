@@ -17,7 +17,7 @@ origins = [
 ]
 
 app.add_middleware(
-    StarletteCORSMiddleware,
+    CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
@@ -26,7 +26,7 @@ app.add_middleware(
 
 
 # Define los operadores lógicos permitidos
-#logical_operators = {'and', 'or', 'not', 'implies', 'iff'}
+# logical_operators = {'and', 'or', 'not', 'implies', 'iff'}
 logical_operators = {'∧', '∨', '¬', '→', '↔'}
 # Función para verificar la sintaxis de la proposición
 
@@ -83,7 +83,6 @@ def realizar_calculo(proposicion):
         print(check)
 
 
-
 # Función para obtener los valores de verdad de una proposición
 def obtener_valores_de_verdad(proposicion):
     # Parsear la proposición como una expresión simbólica
@@ -110,7 +109,7 @@ def obtener_valores_de_verdad(proposicion):
         tabla.append(fila)
 
     # Agregar las columnas de operaciones lógicas al conjunto de columnas
-    columnas = variables + columnas_operaciones
+    columnas = [str(var) for var in variables] + columnas_operaciones
 
     # Ordenar las columnas de menor a mayor longitud
     columnas_ordenadas = sorted(columnas, key=lambda x: len(str(x)))
@@ -122,14 +121,9 @@ def obtener_valores_de_verdad(proposicion):
     df[proposicion] = df.apply(lambda row: str(
         bool(expr.subs({variables[k]: row[k] for k in range(len(variables))}))), axis=1)
 
-
-    
     matriz_de_listas = [df.columns.tolist()] + df.values.tolist()
-    
+
     return (matriz_de_listas)
-
-
-
 
 
 @app.get("/")
@@ -137,13 +131,7 @@ def read_root():
     return {"response": "Welcome to use free Algebra boolean calculator"}
 
 
-"""@app.post("/formula")
-def read_item(operation: Operation):
-    response = writeTruthTable2(operation.formula)
-    return { "response": response }"""
-
-
-"""@app.post('/formula')
+@app.post('/formula')
 def procesar_proposicion(operation: Operation):
     proposicion = operation.formula
     expresion = realizar_calculo(proposicion)
@@ -152,25 +140,4 @@ def procesar_proposicion(operation: Operation):
         print(response)
         return {"response": response}
     else:
-        return {"error": 'La proposición no está bien formada'}"""
-
-
-@app.post('/formula', response_class=JSONResponse)
-async def procesar_proposicion(request: Request, operation: Operation):
-    proposicion = operation.formula
-    expresion = realizar_calculo(proposicion)
-    if expresion is not None:
-        response = obtener_valores_de_verdad(str(expresion))
-        return JSONResponse(content={"response": response})
-    else:
-        return JSONResponse(content={"error": 'La proposición no está bien formada'})
-
-
-"""prop = '¬p'
-exp = realizar_calculo(prop)
-if exp is not None:
-    response = obtener_valores_de_verdad(str(exp))
-    print(response)
-
-else:
-    print('La proposición no está bien formada')"""
+        return {"error": 'La proposición no está bien formada'}
