@@ -50,7 +50,6 @@ def convertir_sympy(expresion, simbolo_dict):
     return eval(expresion.replace("¬", "~").replace("∧", "&").replace("∨", "|").replace("→", ">>"), simbolo_dict)
 
 
-
 def revertir_operadores(expresion_sympy):
     expresion = str(expresion_sympy).replace("~", "¬").replace("&", "∧").replace("|", "∨").replace(">>", "→").replace("==", "↔")
     return expresion
@@ -80,9 +79,9 @@ def generar_tabla_de_verdad(expresion):
 
     return tabla
 
-expresion = "(A ↔ ¬B)"
-tabla_de_verdad = generar_tabla_de_verdad(expresion)
-# La variable "tabla_de_verdad" esta la matriz
+# expresion = "(A ↔ ¬B)"
+# tabla_de_verdad = generar_tabla_de_verdad(expresion)
+# # La variable "tabla_de_verdad" esta la matriz
 
 @app.get("/")
 def read_root():
@@ -92,9 +91,9 @@ def read_root():
 @app.post('/formula')
 def procesar_proposicion(operation: Operation):
     proposicion = operation.formula
-    expresion = realizar_calculo(proposicion)
+    expresion = proposicion
     if expresion is not None:
-        response = obtener_valores_de_verdad(str(expresion))
+        response = generar_tabla_de_verdad(str(expresion))
         print(response)
         return {"response": response}
     else:

@@ -126,7 +126,7 @@ async function getTrueValue() {
     if (value != "NA") {
       contado++;
 
-      userTrueValues += "V" == value ? "True" : "False";
+      userTrueValues += value;
     }
   }
 
